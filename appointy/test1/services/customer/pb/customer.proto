@@ -1,0 +1,163 @@
+syntax = "proto3";
+
+package appointy.customer.v1.v1;
+
+option go_package = "pb";
+
+import "annotations/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "validate/validate.proto";
+import "validate/chaku.proto";
+import "types/types.proto";
+import "pehredaar/pehredaar.proto";
+import "eventspush/push.proto";
+import "schema/schema.proto";
+
+service Customers {
+
+    // CreateCustomer creates new customer.
+    rpc CreateCustomer (CreateCustomerRequest) returns (Customer) {
+        option (google.api.http) = {
+            post: "/v1/customers"
+            body: "*"
+        };
+        option (pehredaar.paths) = {
+            resource: "parent"
+        };
+        option (eventspush.event) = {
+            push: true
+        };
+        option (graphql.schema) = {
+            mutation : "createCustomer"
+        };
+    }
+
+    // GetCustomer returns the customer by its unique id.
+    rpc GetCustomer (GetCustomerRequest) returns (Customer) {
+        option (google.api.http) = {
+            get: "/v1/customers/{id}"
+        };
+        option (pehredaar.paths) = {
+            resource: "id"
+        };
+        option (graphql.schema) = {
+            query : "customer"
+        };
+    }
+
+    // DeleteCustomer will delete the customer from the system by Id.
+    // This will be a soft delete from the system
+    rpc DeleteCustomer (DeleteCustomerRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            delete: "/v1/customers/{id}"
+        };
+        option (pehredaar.paths) = {
+            resource: "id"
+        };
+        option (eventspush.event) = {
+            push: true
+        };
+        option (graphql.schema) = {
+            mutation : "deleteCustomer"
+        };
+    }
+
+    // UpdateCustomer will update the customer identified by its customer id.
+    // Update Customer uses Field Mask to update specific properties of customer object
+    rpc UpdateCustomer (UpdateCustomerRequest) returns (Customer) {
+        option (google.api.http) = {
+            put: "/v1/customers/{customer.id}"
+            body: "*"
+        };
+        option (pehredaar.paths) = {
+            resource: "customer.id"
+        };
+        option (eventspush.event) = {
+            push: true
+        };
+        option (graphql.schema) = {
+            mutation : "updateCustomer"
+        };
+    }
+
+    // ListCustomer lists all the Customer(s)
+    rpc ListCustomer (ListCustomerRequest) returns (ListCustomerResponse) {
+        option (google.api.http) = {
+            get : "/v1/customers"
+        };
+        option (pehredaar.paths) = {
+            resource: "parent"
+        };
+        option (graphql.schema) = {
+            query : "customers"
+        };
+    }
+
+    // Gets all the Customer(s) by their ids
+    rpc BatchGetCustomer (BatchGetCustomerRequest) returns (BatchGetCustomerResponse) {
+        option (google.api.http) = {
+            get: "/v1/customers:batchGet"
+        };
+        option (pehredaar.paths) = {
+            resource: "ids"
+        };
+    }
+}
+
+message Customer {
+
+    option (chaku.root) = true;
+    option (chaku.prefix) = 'cus';
+
+    string id = 1;
+
+	// fields
+}
+
+message CreateCustomerRequest {
+    string parent = 1 [(validate.rules).string.min_len = 3];
+    Customer customer = 2 [(validate.rules).message.required = true];
+}
+
+message GetCustomerRequest {
+    string id = 1 [(validate.rules).string.min_len = 3];
+    google.protobuf.FieldMask view_mask = 2;
+}
+
+message DeleteCustomerRequest {
+    string id = 1 [(validate.rules).string.min_len = 3];
+}
+
+message UpdateCustomerRequest {
+    Customer customer = 1 [(validate.rules).message.required = true];
+    google.protobuf.FieldMask update_mask = 2;
+}
+
+message ListCustomerRequest {
+
+    // Parent is a fully qualified string that contains information about the
+    // owner in hierarchical manner group/location/business (required)
+    string parent = 1;
+
+    google.protobuf.FieldMask view_mask = 6;
+}
+
+message ListCustomerResponse {
+
+    repeated CustomerNode nodes = 1;
+}
+
+message CustomerNode {
+    string position = 1;
+    Customer node = 2;
+}
+
+message BatchGetCustomerRequest {
+    repeated string ids = 1;
+    google.protobuf.FieldMask view_mask = 2;
+}
+
+message BatchGetCustomerResponse {
+    repeated Customer customer = 1;
+}

@@ -1,0 +1,31 @@
+BEGIN:VCALENDAR
+PRODID:-//CALENDARSERVER.ORG//NONSGML Version 1//EN
+METHOD:REQUEST
+VERSION:2.0
+BEGIN:VEVENT
+DTEND:20210409T084500Z
+ORGANIZER;CN=shikhar.v@appointy.com;SCHEDULE-AGENT=CLIENT;EMAIL=shikhar.v
+ @appointy.com:mailto:2_GE3DINZWGE2TKOBQGUYTMNBXGZQPZKOZ7GBSYM4IPY2LQYZP3
+ 7TETPSODQHUVO747VWCXP2JLLXB6@imip.me.com
+UID:1b50far812fjfn1qqcsqjru72k@google.com
+DTSTAMP:20210409T082238Z
+DESCRIPTION:-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~
+ :~:~:~:~:~:~:~:~:~::~:~::-\nPlease do not edit this section of the descr
+ iption.\n\nThis event has a video call.\nJoin: https://meet.google.com/x
+ vf-xdwe-utr\n(US) +1 262-423-7978 PIN: 241225346#\nView more phone numbe
+ rs: https://tel.meet/xvf-xdwe-utr?pin=9178842648181&hs=7\n-::~:~::~:~:~:
+ ~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~::~:~::
+ -
+STATUS:CONFIRMED
+SEQUENCE:0
+SUMMARY:Intern Task
+LAST-MODIFIED:20210409T081429Z
+DTSTART:20210409T083000Z
+CREATED:20210409T081351Z
+ATTENDEE;CN=fenil@appointy.com;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;X-N
+ UM-GUESTS=0;PARTSTAT=NEEDS-ACTION:mailto:fenil@appointy.com
+ATTENDEE;CN=shikhar.v@appointy.com;CUTYPE=INDIVIDUAL;PARTSTAT=ACCEPTED;RO
+ LE=REQ-PARTICIPANT;X-NUM-GUESTS=0;EMAIL=shikhar.v@appointy.com:/aMTY0NzY
+ xNTU4MDUxNjQ3Nk8ZixqejtL0HsVrDimDvOoNUqSpyxVhRGUueNCNaqjH/principal/
+END:VEVENT
+END:VCALENDAR

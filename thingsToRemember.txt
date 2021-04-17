@@ -1,0 +1,7 @@
+>Functional Options
+>When using range and getting each entity in array/slice, one may get copy and NOT the real value, so try to use pointers, for ref. have a look at blackjack's first *Hand{&player, &dealer} part.
+>equivalent: http.Handle("/", http.HandlerFunc(f)) and http.HandleFunc("/", f), if f is of type func(http.ResponseWriter, *http.Response).
+>Hijacking and Flushing
+>Return Concrete types, receive interfaces as parameters
+>Error handling using type assertions
+>Backward compatibility using type assertions

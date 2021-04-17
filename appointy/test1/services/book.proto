@@ -1,0 +1,185 @@
+syntax = "proto3";
+
+package saastack/books.v1;
+
+option go_package = "pb";
+
+import "annotations/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "validate/validate.proto";
+import "validate/chaku.proto";
+import "types/types.proto";
+import "pehredaar/pehredaar.proto";
+import "eventspush/push.proto";
+import "schema/schema.proto";
+
+service Books {
+
+    // CreateBook creates new book.
+    rpc CreateBook (CreateBookRequest) returns (Book) {
+        option (google.api.http) = {
+            post: "/v1/books"
+            body: "*"
+        };
+        option (pehredaar.paths) = {
+            resource: "parent"
+        };
+        option (eventspush.event) = {
+            push: true
+        };
+        option (graphql.schema) = {
+            mutation : "createBook"
+        };
+    }
+
+    // GetBook returns the book by its unique id.
+    rpc GetBook (GetBookRequest) returns (Book) {
+        option (google.api.http) = {
+            get: "/v1/books/{id}"
+        };
+        option (pehredaar.paths) = {
+            resource: "id"
+        };
+        option (graphql.schema) = {
+            query : "book"
+        };
+    }
+
+    // DeleteBook will delete the book from the system by Id.
+    // This will be a soft delete from the system
+    rpc DeleteBook (DeleteBookRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            delete: "/v1/books/{id}"
+        };
+        option (pehredaar.paths) = {
+            resource: "id"
+        };
+        option (eventspush.event) = {
+            push: true
+        };
+        option (graphql.schema) = {
+            mutation : "deleteBook"
+        };
+    }
+
+    // UpdateBook will update the book identified by its book id.
+    // Update Book uses Field Mask to update specific properties of book object
+    rpc UpdateBook (UpdateBookRequest) returns (Book) {
+        option (google.api.http) = {
+            put: "/v1/books/{book.id}"
+            body: "*"
+        };
+        option (pehredaar.paths) = {
+            resource: "book.id"
+        };
+        option (eventspush.event) = {
+            push: true
+        };
+        option (graphql.schema) = {
+            mutation : "updateBook"
+        };
+    }
+
+    // ListBook lists all the Book(s)
+    rpc ListBook (ListBookRequest) returns (ListBookResponse) {
+        option (google.api.http) = {
+            get : "/v1/books"
+        };
+        option (pehredaar.paths) = {
+            resource: "parent"
+        };
+        option (graphql.schema) = {
+            query : "books"
+        };
+    }
+
+    // Gets all the Book(s) by their ids
+    rpc BatchGetBook (BatchGetBookRequest) returns (BatchGetBookResponse) {
+        option (google.api.http) = {
+            get: "/v1/books:batchGet"
+        };
+        option (pehredaar.paths) = {
+            resource: "ids"
+        };
+    }
+}
+
+message Book {
+
+    option (chaku.root) = true;
+    option (chaku.prefix) = 'boo';
+
+    string id = 1;
+
+	// fields
+}
+
+message CreateBookRequest {
+    string parent = 1 [(validate.rules).string.min_len = 3];
+    Book book = 2 [(validate.rules).message.required = true];
+}
+
+message GetBookRequest {
+    string id = 1 [(validate.rules).string.min_len = 3];
+    google.protobuf.FieldMask view_mask = 2;
+}
+
+message DeleteBookRequest {
+    string id = 1 [(validate.rules).string.min_len = 3];
+}
+
+message UpdateBookRequest {
+    Book book = 1 [(validate.rules).message.required = true];
+    google.protobuf.FieldMask update_mask = 2;
+}
+
+message ListBookRequest {
+
+    // Parent is a fully qualified string that contains information about the
+    // owner in hierarchical manner group/location/business (required)
+    string parent = 1 [(validate.rules).string.min_len = 1];
+
+    // First specifies the number of rows that are to be returned starting after
+    // the the cursor (value of after) (required if last is 0 and before is
+    // empty).
+    uint32 first = 2;
+
+    // After takes any value as cursor to get the data after that point. Data
+    // should be sorted on type of value specified for After For Ex. id, datetime,
+    // name...
+    //(required if last is 0 and before is empty).
+    string after = 3;
+
+    // Last specifies the number of rows that are to be returned ending before the
+    // the cursor (value of before) (required if first is 0 and after is empty).
+    uint32 last = 4;
+
+    // Before takes any value as cursor to get the data before that point. Data
+    // should be sorted on type of value specified for Before For Ex. id,
+    // datetime, name...
+    //(required if first is 0 and after is empty).
+    string before = 5;
+
+    google.protobuf.FieldMask view_mask = 6;
+}
+
+message ListBookResponse {
+
+    repeated BookNode nodes = 1;
+    saastack.types.PageInfo page_info = 2;
+}
+
+message BookNode {
+    string position = 1;
+    Book node = 2;
+}
+
+message BatchGetBookRequest {
+    repeated string ids = 1;
+    google.protobuf.FieldMask view_mask = 2;
+}
+
+message BatchGetBookResponse {
+    repeated Book book = 1;
+}

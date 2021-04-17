@@ -1,0 +1,5 @@
+1. parent pattern matching
+2. ** in id fields in department
+3. Use of pii in proto
+4. How to define foreign key relations
+5. Do we not need to implement anything in generated files, then what with case of location_ids in customer service
